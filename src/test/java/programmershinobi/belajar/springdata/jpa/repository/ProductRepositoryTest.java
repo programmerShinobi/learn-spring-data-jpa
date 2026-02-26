@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import programmershinobi.belajar.springdata.jpa.entity.Category;
 import programmershinobi.belajar.springdata.jpa.entity.Product;
 
@@ -49,6 +50,15 @@ class ProductRepositoryTest {
         assertEquals(2, products.size());
         assertEquals("DELL", products.get(0).getName());
         assertEquals("ADVAN", products.get(1).getName());
+    }
+
+    @Test
+    void sort() {
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        List<Product> products = productRepository.findAllByCategory_Name("LAPTOP MAHAL", sort);
+        assertEquals(2, products.size());
+        assertEquals("DELL", products.get(1).getName());
+        assertEquals("ADVAN", products.get(0).getName());
     }
 
 }
