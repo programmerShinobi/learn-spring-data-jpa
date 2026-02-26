@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import programmershinobi.belajar.springdata.jpa.entity.Category;
 import programmershinobi.belajar.springdata.jpa.entity.Product;
@@ -61,4 +63,17 @@ class ProductRepositoryTest {
         assertEquals("ADVAN", products.get(0).getName());
     }
 
+    @Test
+    void pageable() {
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Order.desc("id")));
+        List<Product> products = productRepository.findAllByCategory_Name("LAPTOP MAHAL", pageable);
+        assertEquals(1, products.size());
+        assertEquals("ADVAN", products.get(0).getName());
+
+        pageable = PageRequest.of(1, 1, Sort.by(Sort.Order.desc("id")));
+        products = productRepository.findAllByCategory_Name("LAPTOP MAHAL", pageable);
+        assertEquals(1, products.size());
+        assertEquals("DELL", products.get(0).getName());
+
+    }
 }
