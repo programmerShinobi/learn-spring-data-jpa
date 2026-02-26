@@ -83,4 +83,16 @@ class ProductRepositoryTest {
         assertEquals("DELL", products.getContent().get(0).getName());
 
     }
+
+    @Test
+    void count() {
+        Long count = productRepository.count();
+        assertEquals(2L, count);
+
+        count = productRepository.countByCategory_Name("LAPTOP MAHAL");
+        assertEquals(2L, count);
+
+        count = productRepository.countByCategory_Name("NOTHING");
+        assertEquals(0L, count);
+    }
 }
