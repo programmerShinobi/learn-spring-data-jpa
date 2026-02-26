@@ -157,4 +157,31 @@ class ProductRepositoryTest {
         assertEquals(1, products.size());
         assertEquals("DELL", products.get(0).getName());
     }
+
+    @Test
+    void searchProducts() {
+        Pageable pageable = PageRequest.of(0, 2,  Sort.by(Sort.Order.desc("id")));
+        Page<Product> products = productRepository.searchProduct("%D%", pageable);
+        assertEquals(2, products.getContent().size());
+        assertEquals(2, products.getTotalElements());
+        assertEquals(1, products.getTotalPages());
+
+        products = productRepository.searchProduct("DELL", pageable);
+        assertEquals(1, products.getContent().size());
+        assertEquals(0, products.getNumber());
+        assertEquals(1, products.getTotalElements());
+        assertEquals(1, products.getTotalPages());
+
+        products = productRepository.searchProduct("ADVAN", pageable);
+        assertEquals(1, products.getContent().size());
+        assertEquals(0, products.getNumber());
+        assertEquals(1, products.getTotalElements());
+        assertEquals(1, products.getTotalPages());
+
+        products = productRepository.searchProduct("NOTHING", pageable);
+        assertEquals(0, products.getContent().size());
+        assertEquals(0, products.getNumber());
+        assertEquals(0, products.getTotalElements());
+        assertEquals(0, products.getTotalPages());
+    }
 }
