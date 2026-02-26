@@ -95,4 +95,13 @@ class ProductRepositoryTest {
         count = productRepository.countByCategory_Name("NOTHING");
         assertEquals(0L, count);
     }
+
+    @Test
+    void existsByName() {
+        boolean exists = productRepository.existsByName("ADVAN");
+        assertTrue(exists);
+
+        exists = productRepository.existsByName("NOTHING");
+        assertFalse(exists);
+    }
 }
