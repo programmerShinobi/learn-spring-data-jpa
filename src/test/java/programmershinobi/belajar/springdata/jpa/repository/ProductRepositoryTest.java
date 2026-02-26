@@ -148,4 +148,13 @@ class ProductRepositoryTest {
         assertEquals(0, delete);
 
     }
+
+    @Test
+    void namedQuery() {
+        Pageable pageable = PageRequest.of(0, 1);
+        List<Product> products = productRepository.searchProductUsingName("DELL", pageable);
+
+        assertEquals(1, products.size());
+        assertEquals("DELL", products.get(0).getName());
+    }
 }
