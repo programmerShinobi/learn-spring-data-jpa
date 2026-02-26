@@ -110,8 +110,8 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void testDelete() {
-        transactionOperations.executeWithoutResult(transactionStatus -> {
+    void deleteModeRolBack() {
+        transactionOperations.executeWithoutResult(transactionStatus -> { // transaction 1
             Category category = categoryRepository.findById(1L).orElse(null);
             assertNotNull(category);
 
@@ -119,14 +119,33 @@ class ProductRepositoryTest {
             product.setName("LENOVO");
             product.setPrice(5_000_000L);
             product.setCategory(category);
-            productRepository.save(product);
+            productRepository.save(product); // transaction 1
 
-            int delete = productRepository.deleteByName("LENOVO");
+            int delete = productRepository.deleteByName("LENOVO"); // transaction 1
             assertEquals(1, delete);
 
-            delete = productRepository.deleteByName("NOTHING");
+            delete = productRepository.deleteByName("NOTHING"); // transaction 1
             assertEquals(0, delete);
 
         });
+    }
+
+    @Test
+    void deleteModeUnrolBack() {
+        Category category = categoryRepository.findById(1L).orElse(null);
+        assertNotNull(category);
+
+        Product product = new Product();
+        product.setName("LENOVO");
+        product.setPrice(5_000_000L);
+        product.setCategory(category);
+        productRepository.save(product); // transaction 1
+
+        int delete = productRepository.deleteByName("LENOVO"); // transaction 2
+        assertEquals(1, delete);
+
+        delete = productRepository.deleteByName("NOTHING"); // transaction 3
+        assertEquals(0, delete);
+
     }
 }
