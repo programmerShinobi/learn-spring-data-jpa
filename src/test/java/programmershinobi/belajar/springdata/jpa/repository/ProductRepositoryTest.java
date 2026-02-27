@@ -9,6 +9,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.support.TransactionOperations;
 import programmershinobi.belajar.springdata.jpa.entity.Category;
 import programmershinobi.belajar.springdata.jpa.entity.Product;
+import programmershinobi.belajar.springdata.jpa.model.ProductPrice;
+import programmershinobi.belajar.springdata.jpa.model.SimpleProduct;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -266,5 +268,14 @@ class ProductRepositoryTest {
         assertEquals(2, products.size());
         assertEquals("DELL", products.get(0).getName());
         assertEquals("ADVAN", products.get(1).getName());
+    }
+
+    @Test
+    void projection() {
+        List<SimpleProduct> simpleProducts = productRepository.findAllByNameLike("%D%", SimpleProduct.class);
+        assertEquals(2, simpleProducts.size());
+
+        List<ProductPrice> productPrices = productRepository.findAllByNameLike("%D%", ProductPrice.class);
+        assertEquals(2, productPrices.size());
     }
 }
