@@ -3,6 +3,8 @@ package programmershinobi.belajar.springdata.jpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import programmershinobi.belajar.springdata.jpa.entity.Category;
 
 import java.util.List;
@@ -69,6 +71,33 @@ class CategoryRepositoryTest {
         assertNotNull(category.getId());
         assertNotNull(category.getCreatedDate());
         assertNotNull(category.getLastModifiedDate());
+    }
+
+    @Test
+    void example() {
+        Category category = new Category();
+        category.setName("LAPTOP MAHAL");
+        category.setId(1L);
+
+        Example<Category> example = Example.of(category);
+
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(1, categories.size());
+        assertEquals("LAPTOP MAHAL", categories.get(0).getName());
+    }
+
+    @Test
+    void exampleMatcher() {
+        Category category = new Category();
+        category.setName("lApTop MahAl");
+
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues().withIgnoreCase();
+
+        Example<Category> example = Example.of(category, matcher);
+
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(1, categories.size());
+        assertEquals("LAPTOP MAHAL", categories.get(0).getName());
     }
 
 }
