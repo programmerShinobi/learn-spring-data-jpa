@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.support.TransactionOperations;
 import programmershinobi.belajar.springdata.jpa.entity.Category;
 import programmershinobi.belajar.springdata.jpa.entity.Product;
@@ -248,5 +249,22 @@ class ProductRepositoryTest {
             product.setPrice(10_000_000L); // 10 million
             productRepository.save(product);
         });
+    }
+
+    @Test
+    void specification() {
+        Specification<Product> specification = (root, criteriaQuery, criteriaBuilder) -> {
+          return criteriaQuery.where(
+                  criteriaBuilder.or(
+                          criteriaBuilder.equal(root.get("name"), "DELL"),
+                          criteriaBuilder.equal(root.get("name"), "ADVAN")
+                  )
+          ).getRestriction();
+        };
+
+        List<Product> products = productRepository.findAll(specification);
+        assertEquals(2, products.size());
+        assertEquals("DELL", products.get(0).getName());
+        assertEquals("ADVAN", products.get(1).getName());
     }
 }
