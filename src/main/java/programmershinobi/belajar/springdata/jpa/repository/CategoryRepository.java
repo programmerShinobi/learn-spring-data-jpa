@@ -16,4 +16,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     // WHERE name like ?
     List<Category> findAllByNameLike(String name);
 
+    // WHERE name = ?
+    Category findByNameContains(String name);
 }

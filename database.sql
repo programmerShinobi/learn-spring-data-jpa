@@ -24,4 +24,14 @@ CREATE TABLE products
 
 SELECT * FROM products;
 
-DELETE FROM products WHERE name = 'LENOVO';
+DELETE
+FROM products
+WHERE name = 'LENOVO';
+
+ALTER TABLE categories
+    ADD COLUMN created_date TIMESTAMP;
+
+ALTER TABLE categories
+    ADD COLUMN last_modified_date TIMESTAMP;
+
+SELECT * FROM categories;
